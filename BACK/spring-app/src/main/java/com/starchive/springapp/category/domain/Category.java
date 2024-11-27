@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 public class Category {
     @Id
     @GeneratedValue
+    @Column(name = "categoryId")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
