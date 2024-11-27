@@ -11,16 +11,18 @@ import {
   UserProfileWrapper, 
   Wrapper } 
   from './PostItem.style';
+import TagWrapper from '@_components/TagWrapper/TagWrapper';
 
 interface PostItemProps {
   title: string,
   content: string,
   createdAt: string,
   userName: string,
-  userIntro: string
+  userIntro: string,
+  tagList: string[]
 }
 
-function PostItem({ title, content, createdAt, userName, userIntro }: PostItemProps) {
+function PostItem({ title, content, createdAt, userName, userIntro, tagList }: PostItemProps) {
   return (
     <Wrapper>
       <TagContainer>
@@ -44,6 +46,7 @@ function PostItem({ title, content, createdAt, userName, userIntro }: PostItemPr
       <Link to="#">
         <Content>{ content }</Content>
       </Link>
+      <TagWrapper tagList={tagList} />
     </Wrapper>
   )
 }
