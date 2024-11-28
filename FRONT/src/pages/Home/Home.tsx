@@ -64,7 +64,6 @@ function Home() {
             요거슨 내용 입니다. 요거슨 내용 입니다.요거슨 내용 입니다.요거슨 내용 입니다.요거슨 내용 입니다. "
             userIntro="어쩌구 저쩌구 개발자입니다."
             userName="도안탄히엔"
-            tagList={["Design Pattern", "Factory Pattern"]}
             />
           <PostItem 
             title="뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목"
@@ -73,7 +72,6 @@ function Home() {
             요거슨 내용 입니다. 요거슨 내용 입니다.요거슨 내용 입니다.요거슨 내용 입니다.요거슨 내용 입니다. "
             userIntro="어쩌구 저쩌구 개발자입니다."
             userName="도안탄히엔"
-            tagList={["Design Pattern", "Factory Pattern"]}
             />
           <PostItem 
             title="뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목뭐시기 제목"
@@ -82,7 +80,6 @@ function Home() {
             요거슨 내용 입니다. 요거슨 내용 입니다.요거슨 내용 입니다.요거슨 내용 입니다.요거슨 내용 입니다. "
             userIntro="어쩌구 저쩌구 개발자입니다."
             userName="도안탄히엔"
-            tagList={["Design Pattern", "Factory Pattern"]}
             />
         </PostItemContainer>
         <TagContainer>
