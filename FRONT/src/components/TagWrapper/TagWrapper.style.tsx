@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
-export const Tag = styled.div`
+export const Tag = styled.span`
   display: inline-block;
   padding: 2px 5px;
-  font-size: 12px;
   background-color: var(--sub-color);
   color: var(--text-color);  // Fix the typo here
   width: fit-content;
