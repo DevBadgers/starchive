@@ -53,6 +53,9 @@ export const MenuWrapper = styled.article`
     h4:hover {
         color: var(--point-color);
     }
+    ${ImageWrapper} h4:hover {
+        color: #fff;
+    }
     
     @media (max-width: 768px) {
         display: none;
