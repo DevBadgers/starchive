@@ -9,7 +9,7 @@ import { useSearchParams } from "react-router-dom";
 
 function Home() {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _ ] = useSearchParams();
   const categoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
   const {
     tagList,
