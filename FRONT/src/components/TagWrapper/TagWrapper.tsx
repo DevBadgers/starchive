@@ -1,12 +1,8 @@
+import { Tag as TagType } from "../../types/tag";
 import { TagList, Tag } from "./TagWrapper.style";
 
-interface Tag {
-  id: number;
-  name: string;
-}
-
 interface TagWrapperProps {
-  tagList: Tag[];
+  tagList: TagType[];
   onTagClick?: (name: string) => void;
   selectedTag?: string | null;
 }
