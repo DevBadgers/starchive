@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPostList } from "../../services/postApi";
-import { fetchPostsByTag } from "../../services/tagApi";
+import { fetchAllTagList, fetchPostsByTag, fetchTagListByCategory } from "../../services/tagApi";
 import { Post } from "../../types/post";
 import { ApiResponse } from "../../services/api";
+import { Tag } from "../../types/tag";
 
-export const useTag = () => {
+export const useTag = (categoryId?: number) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  const { data: tagList } = useQuery<ApiResponse<Tag[]>>({
+    queryKey: categoryId ? ['tagList', categoryId] : ['tagList'],
+    queryFn: () =>
+      categoryId ? fetchTagListByCategory(categoryId) : fetchAllTagList(),
+  });
 
   const { data, refetch } = useQuery<ApiResponse<Post[]>>({
     queryKey: selectedTag ? ["postData", selectedTag] : ["postData"],
@@ -24,6 +31,7 @@ export const useTag = () => {
   };
 
   return {
+    tagList: tagList?.data || [],
     selectedTag,
     posts: data?.data || [],
     handleTagClick,

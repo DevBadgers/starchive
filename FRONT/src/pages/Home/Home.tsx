@@ -5,22 +5,18 @@ import { PagingButtonWrapper, PostItemContainer, Wrapper } from "./Home.style";
 import { Post } from "../../types/post";
 import TagWrapper from "../../components/TagWrapper/TagWrapper";
 import { useTag } from "../../components/TagWrapper/useTag";
+import { useSearchParams } from "react-router-dom";
 
 function Home() {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const tagList = [
-    { id: 1, name: "Design Pattern" },
-    { id: 2, name: "Factory Pattern" },
-    { id: 3, name: "CI/CD" },
-    { id: 4, name: "DevOps" },
-    { id: 5, name: "Software Engineering" },
-  ];  
-
-  const { 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
+  const {
+    tagList,
     selectedTag,
     posts, 
     handleTagClick 
-  } = useTag();
+  } = useTag(categoryId);
 
   return (
     <Wrapper>
