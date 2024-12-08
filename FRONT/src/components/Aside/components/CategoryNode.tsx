@@ -1,4 +1,4 @@
-import categoryToggleButton from '../../../assets/icons/category-toggle-button.svg'
+import categoryToggleButton from '@_assets/icons/category-toggle-button.svg'
 import useCategoryNode from './useCategoryNode';
 import { Category, CategoryId } from '../../../types/category';
 import {

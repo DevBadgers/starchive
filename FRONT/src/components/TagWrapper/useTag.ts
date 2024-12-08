@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPostList } from "../../services/postApi";
-import { fetchAllTagList, fetchTagListByCategory } from "../../services/tagApi";
+import { fetchPostList } from "@_services/postApi";
+import { fetchAllTagList, fetchTagListByCategory } from "@_services/tagApi";
 import { Post } from "../../types/post";
 import { ApiResponse } from "../../services/api";
 import { Tag } from "../../types/tag";
@@ -13,7 +13,7 @@ interface UseTagParams {
 }
 
 export const useTag = ({ categoryId, pageSize, page }: UseTagParams = {}) => {
-  const [selectedTag, setSelectedTag] = useState<number | null>(null);
+  const [selectedTag, setSelectedTag] = useState<number | undefined>(undefined);
 
   const { data: tagList } = useQuery<ApiResponse<Tag[]>>({
     queryKey: categoryId ? ['tagList', categoryId] : ['tagList'],
@@ -32,14 +32,14 @@ export const useTag = ({ categoryId, pageSize, page }: UseTagParams = {}) => {
     queryFn: () => 
       fetchPostList({ 
         category: categoryId, 
-        tag: selectedTag || undefined, 
+        tag: selectedTag, 
         pageSize, 
         page 
       }),
   });
 
   const handleTagClick = (tagId: number) => {
-    const newSelectedTag = selectedTag === tagId ? null : tagId;
+    const newSelectedTag = selectedTag === tagId ? undefined : tagId;
     setSelectedTag(newSelectedTag);
   };
 

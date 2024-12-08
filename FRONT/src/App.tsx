@@ -3,7 +3,7 @@ import './App.css'
 import Home from './pages/Home/Home'
 import Navbar from '@_components/Navbar/Navbar'
 import Footer from '@_components/Footer/Footer'
-import Aside from './components/Aside/Aside'
+import Aside from '@_components/Aside/Aside'
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <Aside />
       <Navbar />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/:page?' element={<Home />} />
       </Routes>
       <Footer />
     </>

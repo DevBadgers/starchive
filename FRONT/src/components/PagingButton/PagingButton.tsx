@@ -1,6 +1,6 @@
 import { PagingButtonContainer, ArrowButton, PageButton } from "./PagingButton.style";
-import leftArrow from "../../assets/icons/left-arrow.svg";
-import rightArrow from "../../assets/icons/right-arrow.svg";
+import leftArrow from "@_assets/icons/left-arrow.svg";
+import rightArrow from "@_assets/icons/right-arrow.svg";
 
 interface PagingButtonProps {
   totalPages: number;

@@ -3,8 +3,8 @@ import { TagList, Tag } from "./TagWrapper.style";
 
 interface TagWrapperProps {
   tagList: TagType[];
-  onTagClick?: (name: string) => void;
-  selectedTag?: string | null;
+  onTagClick?: (name: number) => void;
+  selectedTag?: number | null;
 }
 
 function TagWrapper({ tagList, onTagClick, selectedTag }: TagWrapperProps) {
@@ -13,8 +13,8 @@ function TagWrapper({ tagList, onTagClick, selectedTag }: TagWrapperProps) {
       {tagList.map((tag, index) => (
         <Tag
           key={index}
-          onClick={() => onTagClick && onTagClick(tag.name)}
-          $isSelected={tag.name === selectedTag}
+          onClick={() => onTagClick && onTagClick(tag.id)}
+          $isSelected={tag.id === selectedTag}
         >
           {tag.name}
         </Tag>

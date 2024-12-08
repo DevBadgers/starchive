@@ -11,8 +11,8 @@ import {
   Separator,
 } from "./Footer.style";
 import { Link } from "react-router-dom";
-import logoIcon from "../../assets/logo/logo.svg";
-import githubIcon from "../../assets/icons/github-icon.svg";
+import logoIcon from "@_assets/logo/logo.svg";
+import githubIcon from "@_assets/icons/github-icon.svg";
 
 function Footer() {
   return (

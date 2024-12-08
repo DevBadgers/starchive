@@ -1,5 +1,5 @@
-import exampleProfile from "../../assets/images/example-profile.svg";
-import toggleIcon from "../../assets/icons/toggle-icon.svg";
+import exampleProfile from "@_assets/images/example-profile.svg";
+import toggleIcon from "@_assets/icons/toggle-icon.svg";
 import { NavbarContainer, ToggleIcon, ProfileIcon } from "./Navbar.style";
 import useAside from "../Aside/useAside";
 

@@ -1,22 +1,23 @@
 import PostItem from "./components/PostItem/PostItem";
 import PagingButton from "@_components/PagingButton/PagingButton";
-import { useState } from "react";
 import { PagingButtonWrapper, PostItemContainer, Wrapper } from "./Home.style";
 import { Post } from "../../types/post";
-import TagWrapper from "../../components/TagWrapper/TagWrapper";
-import { useTag } from "../../components/TagWrapper/useTag";
-import { useSearchParams } from "react-router-dom";
+import TagWrapper from "@_components/TagWrapper/TagWrapper";
+import { useTag } from "@_components/TagWrapper/useTag";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 function Home() {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchParams, _ ] = useSearchParams();
+  const navigate = useNavigate();
+  const { page } = useParams();
+  const currentPage = page ? Number(page) : 1;
+  const [searchParams ] = useSearchParams();
   const categoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
   const {
     tagList,
     selectedTag,
     posts, 
     handleTagClick 
-  } = useTag(categoryId);
+  } = useTag({ categoryId, page });
 
   return (
     <Wrapper>
@@ -37,7 +38,11 @@ function Home() {
         }
       </PostItemContainer>
       <PagingButtonWrapper>
-        <PagingButton totalPages={10} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        <PagingButton
+          totalPages={10}
+          currentPage={currentPage}
+          setCurrentPage={(newPage: number) => navigate(`/${newPage}${searchParams.toString()}`)}
+        />
       </PagingButtonWrapper>
     </Wrapper>
   )

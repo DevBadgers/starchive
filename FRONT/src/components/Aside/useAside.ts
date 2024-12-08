@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAsideStore from '../../store/useAsideStore';
 import { Category, CategoryId } from '../../types/category';
-import { fetchCategories } from '../../services/categoryApi';
+import { fetchCategories } from '@_services/categoryApi';
 import { useQuery } from '@tanstack/react-query';
 import { ApiResponse } from '../../services/api';
 
@@ -17,8 +17,8 @@ function useAside() {
     setActiveCategoryId(categoryId);
     navigate(
       categoryId
-        ? `/posts/1/categoryId=${categoryId}`
-        : `/posts/1`
+        ? `/1/categoryId=${categoryId}`
+        : `/`
     );
     setIsAsideOpen(false);
   };

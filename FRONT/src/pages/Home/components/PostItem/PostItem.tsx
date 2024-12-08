@@ -34,7 +34,7 @@ function PostItem({ title, content, createdAt, userName, userIntro, categoryHier
           categoryHier?.map(({ categoryId, categoryName }, i) => 
             <>
               {i !== 0 ? <span> &gt; </span> : null}
-              <Link to={`/posts/${categoryId}`}>{categoryName}</Link>
+              <Link to={`/1?categoryId=${categoryId}`}>{categoryName}</Link>
             </>
           )
         }
