@@ -21,19 +21,19 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final HashTagService hashTagService;
 
-    @GetMapping("/categorys")
+    @GetMapping("/categories")
     @Operation(summary = "카테고리 목록 전체 조회")
     public ResponseEntity<ResponseDto<List<CategoryDto>>> showCategories() {
-        List<CategoryDto> categorys = categoryService.findAll();
-        ResponseDto<List<CategoryDto>> listResponseDto = new ResponseDto<>(categorys);
+        List<CategoryDto> categories = categoryService.findAll();
+        ResponseDto<List<CategoryDto>> listResponseDto = new ResponseDto<>(categories);
         return ResponseEntity.ok(listResponseDto);
     }
 
-    @GetMapping("/categorys/{categoryId}/hashtags")
+    @GetMapping("/categories/{categoryId}/hashtags")
     @Operation(summary = "특정 카테고리에 포함되는 해쉬태그 목록 조회")
     public ResponseEntity<ResponseDto<List<HashTagDto>>> showHashTags(@PathVariable("categoryId") Long categoryId) {
-        List<HashTagDto> categorys = hashTagService.findManyByCategory(categoryId);
-        ResponseDto<List<HashTagDto>> listResponseDto = new ResponseDto<>(categorys);
+        List<HashTagDto> categories = hashTagService.findManyByCategory(categoryId);
+        ResponseDto<List<HashTagDto>> listResponseDto = new ResponseDto<>(categories);
         return ResponseEntity.ok(listResponseDto);
     }
 }

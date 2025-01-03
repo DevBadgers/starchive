@@ -1,8 +1,10 @@
 package com.starchive.springapp.category.exception;
 
+import static com.starchive.springapp.global.ErrorMessage.CATEGORY_NOT_FOUND;
+
 public class CategoryNotFoundException extends RuntimeException {
     public CategoryNotFoundException() {
-        super("카테고리가 존재하지 않습니다.");
+        super(CATEGORY_NOT_FOUND);
     }
 
     public CategoryNotFoundException(String message) {

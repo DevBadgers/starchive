@@ -13,8 +13,6 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -24,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@AutoConfigureTestDatabase(replace = Replace.ANY)
 class CategoryControllerTest {
     @Autowired
     CategoryRepository categoryRepository;
@@ -51,7 +48,7 @@ class CategoryControllerTest {
         categoryRepository.save(child3);
 
         // when
-        mockMvc.perform(get("/categorys")
+        mockMvc.perform(get("/categories")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray())
@@ -75,7 +72,7 @@ class CategoryControllerTest {
                 .content("알고리즘을 학습합시다.")
                 .author("홍길동")
                 .password("1234")
-                .dateTime(LocalDateTime.now())
+                .createAt(LocalDateTime.now())
                 .category(category)
                 .build();
         entityManager.persist(post);
@@ -85,20 +82,14 @@ class CategoryControllerTest {
         entityManager.persist(hashTag1);
         entityManager.persist(hashTag2);
 
-        PostHashTag postHashTag1 = PostHashTag.builder()
-                .post(post)
-                .hashTag(hashTag1)
-                .build();
+        PostHashTag postHashTag1 = new PostHashTag(post, hashTag1);
         entityManager.persist(postHashTag1);
 
-        PostHashTag postHashTag2 = PostHashTag.builder()
-                .post(post)
-                .hashTag(hashTag2)
-                .build();
+        PostHashTag postHashTag2 = new PostHashTag(post, hashTag2);
         entityManager.persist(postHashTag2);
 
         // When & Then
-        mockMvc.perform(get("/categorys/{categoryId}/hashtags", category.getId())
+        mockMvc.perform(get("/categories/{categoryId}/hashtags", category.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray())

@@ -1,7 +1,12 @@
 package com.starchive.springapp.global.exception;
 
+import static com.starchive.springapp.global.ErrorMessage.INVALID_FILE_SIZE;
+
+import com.starchive.springapp.category.exception.CategoryNotFoundException;
+import com.starchive.springapp.hashtag.exception.HashTagNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,5 +25,17 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<String> handleMaxSizeException(CategoryNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(HashTagNotFoundException.class)
+    public ResponseEntity<String> handleMaxSizeException(HashTagNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(INVALID_FILE_SIZE);
     }
 }

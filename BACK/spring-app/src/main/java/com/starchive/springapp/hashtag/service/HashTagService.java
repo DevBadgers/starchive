@@ -26,6 +26,10 @@ public class HashTagService {
         return hashTagRepository.save(hashTag);
     }
 
+    public List<HashTag> findManyByIds(List<Long> ids) {
+        return hashTagRepository.findManyByIdIn(ids);
+    }
+
     public HashTag findOne(String name) {
         return hashTagRepository.findByName(name).orElseThrow(HashTagNotFoundException::new);
     }

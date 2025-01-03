@@ -1,8 +1,10 @@
 package com.starchive.springapp.hashtag.exception;
 
+import static com.starchive.springapp.global.ErrorMessage.HASHTAG_NOT_FOUND;
+
 public class HashTagNotFoundException extends RuntimeException {
     public HashTagNotFoundException() {
-        super("해쉬 태그가 존재 하지 않습니다.");
+        super(HASHTAG_NOT_FOUND);
     }
 
     public HashTagNotFoundException(String message) {

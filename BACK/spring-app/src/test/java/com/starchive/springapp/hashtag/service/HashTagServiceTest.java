@@ -71,13 +71,14 @@ class HashTagServiceTest {
     @Test
     public void 해쉬태그_삭제_테스트() throws Exception {
         //given
-        Post post1 = Post.builder().title("타이틀1").author("content").password("1234").dateTime(LocalDateTime.now())
+        Post post1 = Post.builder().title("타이틀1").author("content").password("1234").createAt(LocalDateTime.now())
                 .build();
-        Post post2 = Post.builder().title("타이틀2").author("content").password("1234").dateTime(LocalDateTime.now())
+        Post post2 = Post.builder().title("타이틀2").author("content").password("1234").createAt(LocalDateTime.now())
                 .build();
         HashTag hashTag1 = hashTagService.save("DP");
-        PostHashTag postHashTag1 = PostHashTag.builder().post(post1).hashTag(hashTag1).build();
-        PostHashTag postHashTag2 = PostHashTag.builder().post(post2).hashTag(hashTag1).build();
+
+        PostHashTag postHashTag1 = new PostHashTag(post1, hashTag1);
+        PostHashTag postHashTag2 = new PostHashTag(post2, hashTag1);
         em.persist(post1);
         em.persist(post2);
         em.persist(postHashTag1);

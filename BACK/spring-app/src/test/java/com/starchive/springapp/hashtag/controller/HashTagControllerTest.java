@@ -41,8 +41,8 @@ class HashTagControllerTest {
     public void 전체_해쉬태그_목록_반환_테스트() throws Exception {
         //given
         List<HashTagDto> mockTags = Arrays.asList(
-                new HashTag(1L, "Spring"),
-                new HashTag(2L, "Java")
+                new HashTag("Spring"),
+                new HashTag("Java")
         ).stream().map(HashTagDto::from).toList();
 
         when(hashTagService.findAll()).thenReturn(mockTags);

@@ -13,15 +13,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "PostHashTag")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@AllArgsConstructor
 public class PostHashTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +31,11 @@ public class PostHashTag {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hashTagId")
     private HashTag hashTag;
+
+    public PostHashTag(Post post, HashTag hashTag) {
+        this.post = post;
+        this.hashTag = hashTag;
+    }
 
 
 }

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "Categorys")
+@Table(name = "Categories")
 public class Category {
     @Id
     @GeneratedValue

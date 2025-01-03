@@ -11,11 +11,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class HashTagRepositoryTest {
     @Autowired
     private HashTagRepository hashTagRepository;
@@ -34,7 +32,7 @@ class HashTagRepositoryTest {
                 .content("알고리즘을 학습합시다.")
                 .author("홍길동")
                 .password("1234")
-                .dateTime(LocalDateTime.now())
+                .createAt(LocalDateTime.now())
                 .category(category)
                 .build();
         entityManager.persist(post);
@@ -44,16 +42,10 @@ class HashTagRepositoryTest {
         entityManager.persist(hashTag1);
         entityManager.persist(hashTag2);
 
-        PostHashTag postHashTag1 = PostHashTag.builder()
-                .post(post)
-                .hashTag(hashTag1)
-                .build();
+        PostHashTag postHashTag1 = new PostHashTag(post, hashTag1);
         entityManager.persist(postHashTag1);
 
-        PostHashTag postHashTag2 = PostHashTag.builder()
-                .post(post)
-                .hashTag(hashTag2)
-                .build();
+        PostHashTag postHashTag2 = new PostHashTag(post, hashTag2);
         entityManager.persist(postHashTag2);
 
         // When
