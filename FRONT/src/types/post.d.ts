@@ -13,3 +13,13 @@ export interface Post {
     name: string
   }[]
 }
+
+export interface CreatePostParams {
+  title: string;
+  content: string;
+  author: string;
+  password: string;
+  categoryId: Category;
+  hashTagIds?: number[];
+  imageIds?: number[];
+}

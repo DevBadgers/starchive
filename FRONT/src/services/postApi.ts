@@ -1,5 +1,5 @@
-import { Post } from "../types/post";
-import { getRequest } from "./api";
+import { CreatePostParams, Post } from "../types/post";
+import { getRequest, postRequest } from "./api";
 
 interface PostListParams {
   category?: number;
@@ -23,3 +23,12 @@ export const fetchPostList = (params?: PostListParams) => {
     params: stringifiedParams
   });
 };
+
+export const createPost = (params: CreatePostParams) => {
+  return postRequest<CreatePostParams>('/post', {
+    body: params,
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
