@@ -5,6 +5,7 @@ import com.starchive.springapp.category.exception.CategoryNotFoundException;
 import com.starchive.springapp.category.repository.CategoryRepository;
 import com.starchive.springapp.hashtag.domain.HashTag;
 import com.starchive.springapp.hashtag.dto.HashTagDto;
+import com.starchive.springapp.hashtag.dto.HashTagResponse;
 import com.starchive.springapp.hashtag.exception.HashTagNotFoundException;
 import com.starchive.springapp.hashtag.repository.HashTagRepository;
 import com.starchive.springapp.posthashtag.repository.PostHashTagRepository;
@@ -20,6 +21,7 @@ public class HashTagService {
     private final HashTagRepository hashTagRepository;
     private final CategoryRepository categoryRepository;
     private final PostHashTagRepository postHashTagRepository;
+    //private final PostService postService;
 
     public HashTag save(String name) {
         HashTag hashTag = new HashTag(name);
@@ -52,6 +54,12 @@ public class HashTagService {
         Category category = categoryRepository.findById(CategoryId).orElseThrow(CategoryNotFoundException::new);
 
         return hashTagRepository.findAllByCategoryId(category.getId()).stream().map(HashTagDto::from).toList();
+    }
+
+    public List<HashTagResponse> findManyByPost(Long postId) {
+        //postService.findOne(postId);
+
+        return hashTagRepository.findAllByPostId(postId).stream().map(HashTagResponse::from).toList();
     }
 
     public HashTagDto updateName(Long hashTagId, String newName) {

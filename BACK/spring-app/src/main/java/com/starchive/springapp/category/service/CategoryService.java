@@ -19,7 +19,8 @@ public class CategoryService {
     }
 
     public Category findOne(Long id) {
-        return categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+        return categoryRepository.findByIdWithChildren(id).orElseThrow(CategoryNotFoundException::new);
     }
+
 
 }

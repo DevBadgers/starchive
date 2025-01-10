@@ -34,4 +34,8 @@ public class PostHashTagService {
 
         postHashTagRepository.saveAll(postHashTags);
     }
+
+    public List<PostHashTag> findManyByHashTag(Long hashTagId) {
+        return postHashTagRepository.findAllByHashTagId(hashTagId);
+    }
 }

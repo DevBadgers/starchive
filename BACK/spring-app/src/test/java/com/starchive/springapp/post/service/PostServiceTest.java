@@ -10,9 +10,11 @@ import com.starchive.springapp.image.domain.PostImage;
 import com.starchive.springapp.image.repository.PostImageRepository;
 import com.starchive.springapp.post.domain.Post;
 import com.starchive.springapp.post.dto.PostCreateRequest;
+import com.starchive.springapp.post.dto.PostListResponse;
 import com.starchive.springapp.post.repository.PostRepository;
 import com.starchive.springapp.posthashtag.domain.PostHashTag;
 import com.starchive.springapp.posthashtag.repository.PostHashTagRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -75,4 +77,26 @@ class PostServiceTest {
 
     }
 
+    @Test
+    public void 게시글_전체조회_통합_테스트() throws Exception {
+        //given
+        Category category = new Category("카테고리", null);
+        categoryRepository.save(category);
+
+        Post post1 = new Post(null, "title1", "content", "author1", "123", LocalDateTime.now(), category);
+        Post post2 = new Post(null, "title2", "content", "author2", "123", LocalDateTime.now(), category);
+        postRepository.saveAll(List.of(post1, post2));
+
+        HashTag hashTag = new HashTag("tag1");
+        hashTagRepository.save(hashTag);
+        postHashTagRepository.save(new PostHashTag(post1, hashTag));
+
+        //when
+        PostListResponse response = postService.findPosts(category.getId(), null, 0, 10);
+
+        //then
+        assertThat(response.getPosts()).hasSize(2);
+        assertThat(response.getPosts()).extracting("title").containsExactlyInAnyOrder("title1", "title2");
+        assertThat(response.getPosts().get(0).getHashTags()).extracting("name").containsExactly("tag1");
+    }
 }
