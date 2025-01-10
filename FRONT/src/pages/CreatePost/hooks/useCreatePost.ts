@@ -3,8 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import { createPost } from '@_services/createPostApi';
 import { useNavigate } from 'react-router-dom';
 import { CreatePostParams } from '../../../types/post';
+import { postTag } from '../../../services/tagApi';
 
-function useCreatePost() {
+function useCreatePost(tags: string[]) {
   const navigate = useNavigate();
   const [post, setPost] = useState<CreatePostParams>({
     title: '',
@@ -46,7 +47,22 @@ function useCreatePost() {
     return true
   }
 
+  const processTags = async (tagNames: string[]) => {
+    if (tagNames.length === 0) return;
+
+    await Promise.all(
+      tagNames.map(async (tag) => {
+        const response = await postTag(tag);
+        if (response.data) {
+          post.hashTagIds.push(response.data.id);
+        }
+      })
+    );
+  };
+
   const handleSaveButtonClick = () => {
+    processTags(tags);
+
     if (validateRequiredFields()) {
       mutation.mutate(post);
     }

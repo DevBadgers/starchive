@@ -10,9 +10,11 @@ import TagWrapper from "./components/TagWrapper/TagWrapper";
 import MarkdownEditor from "./components/MarkdownEditor/MarkdownEditor";
 import useCreatePost from "./hooks/useCreatePost";
 import useMarkdownEditor from "./hooks/useMarkdownEditor";
+import useTag from "./hooks/useTag";
 
 function CreatePost() {
-  const { post, handlePostChange, handleSaveButtonClick } = useCreatePost();
+  const { tags, newTag, isInputVisible, handleAddTagClick, handleInputChange, handleInputKeyDown, handleRemoveTag } = useTag();
+  const { post, handlePostChange, handleSaveButtonClick } = useCreatePost(tags);
   const { handleIconButtonClick, handleFileUpload, textareaRef, fileInputRef } = useMarkdownEditor({
     initialMarkdown: post.content,
     imageIds: post.imageIds,
@@ -43,7 +45,15 @@ function CreatePost() {
         fileInputRef={fileInputRef}
         onFileUpload={handleFileUpload}
       />
-      <TagWrapper/>
+      <TagWrapper
+        tags={tags}
+        newTag={newTag}
+        onAddTagClick={handleAddTagClick}
+        onInputChange={handleInputChange}
+        onInputKeyDown={handleInputKeyDown}
+        onRemoveTag={handleRemoveTag}
+        isInputVisible={isInputVisible}
+      />
       <NicknamePasswordInput
         author={post.author}
         password={post.password}

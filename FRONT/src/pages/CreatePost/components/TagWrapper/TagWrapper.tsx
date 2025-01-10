@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   TagInputContainer,
   TagContainer,
@@ -13,34 +12,28 @@ import {
 import tagAddIcon from "@_assets/icons/tag-add-icon.svg";
 import tagDeleteIcon from "@_assets/icons/tag-delete-icon.svg";
 
-function TagWrapper() {
-  const [tags, setTags] = useState<string[]>([]);
-  const [newTag, setNewTag] = useState<string>("");
-  const [isInputVisible, setIsInputVisible] = useState<boolean>(false);
+interface TagWrapperProps {
+  tags: string[];
+  newTag: string;
+  onAddTagClick: () => void;
+  onInputChange: (value: string) => void;
+  onInputKeyDown: (key: string) => void;
+  onRemoveTag: (index: number) => void;
+  isInputVisible: boolean;
+}
 
-  const handleAddTagClick = () => {
-    setIsInputVisible(true);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTag(e.target.value);
-  };
-
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && newTag.trim()) {
-      setTags([...tags, newTag.trim()]);
-      setNewTag("");
-      setIsInputVisible(false);
-    }
-  };
-
-  const handleRemoveTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
-  };
-
+const TagWrapper: React.FC<TagWrapperProps> = ({
+  tags,
+  newTag,
+  onAddTagClick,
+  onInputChange,
+  onInputKeyDown,
+  onRemoveTag,
+  isInputVisible,
+}) => {
   return (
     <TagInputContainer>
-      <AddTagButton onClick={handleAddTagClick}>
+      <AddTagButton onClick={onAddTagClick}>
         <AddTagButtonText>태그 추가</AddTagButtonText>
         <TagIcon src={tagAddIcon} />
       </AddTagButton>
@@ -48,8 +41,8 @@ function TagWrapper() {
         <InputField
           type="text"
           value={newTag}
-          onChange={handleInputChange}
-          onKeyDown={handleInputKeyDown}
+          onChange={(e) => onInputChange(e.target.value)}
+          onKeyDown={(e) => onInputKeyDown(e.key)}
           placeholder="태그를 입력하세요"
         />
       )}
@@ -59,7 +52,7 @@ function TagWrapper() {
           <Tag key={index}>
             <TagText>{tag}</TagText>
             <RemoveButton
-              onClick={() => handleRemoveTag(index)}
+              onClick={() => onRemoveTag(index)}
               src={tagDeleteIcon}
             />
           </Tag>
@@ -67,6 +60,6 @@ function TagWrapper() {
       </TagContainer>
     </TagInputContainer>
   );
-}
+};
 
 export default TagWrapper;
