@@ -6,6 +6,7 @@ on:
       - closed
     branches:
       - develop
+      - main
     paths:
       - 'BACK/spring-app/**'
 
