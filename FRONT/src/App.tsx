@@ -5,8 +5,9 @@ import CreatePost from './pages/CreatePost/CreatePost'
 import Navbar from '@_components/Navbar/Navbar'
 import Footer from '@_components/Footer/Footer'
 import Aside from '@_components/Aside/Aside'
-import useLoadingStore from './store/useLoadingStore';
+import useLoadingStore from './stores/useLoadingStore';
 import LoadingModal from '@_components/LoadingModal/LoadingModal'
+import Toast from './pages/CreatePost/components/Toast/Toast'
 
 function App() {
   const { isLoading } = useLoadingStore();
@@ -20,6 +21,7 @@ function App() {
       </Routes>
       <Footer />
       <LoadingModal isLoading={isLoading} />
+      <Toast />
     </>
   )
 }

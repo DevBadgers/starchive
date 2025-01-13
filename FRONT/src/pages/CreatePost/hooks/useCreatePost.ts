@@ -4,9 +4,11 @@ import { createPost } from '@_services/createPostApi';
 import { useNavigate } from 'react-router-dom';
 import { CreatePostParams } from '../../../types/post';
 import { postTag } from '../../../services/tagApi';
+import useToastStore from '../../../stores/useToastStore';
 
 function useCreatePost(tags: string[]) {
   const navigate = useNavigate();
+  const { setMessage: setToastMessage, setIsVisible: setIsToastVisible } = useToastStore();
   const [post, setPost] = useState<CreatePostParams>({
     title: '',
     content: '',
@@ -41,7 +43,8 @@ function useCreatePost(tags: string[]) {
     if (!post['categoryId']) missingFields.push('카테고리');
 
     if (missingFields.length > 0) {
-      alert(`${missingFields.join(' ,')} 항목을 입력해주세요`);
+      setToastMessage(`${missingFields.join(', ')} 항목을 입력해주세요`);
+      setIsToastVisible(true);
       return false;
     }
     return true
