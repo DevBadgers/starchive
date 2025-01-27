@@ -9,6 +9,11 @@ export const CategoryNodeContainer = styled.li`
   padding: 12px;
   margin-bottom: 4px;
   flex-wrap: wrap;
+
+  &:hover {
+    transform: scale(1.03);
+    transition: transform 0.2s ease;
+  }
 `;
 
 export const IconGroup = styled.div`
