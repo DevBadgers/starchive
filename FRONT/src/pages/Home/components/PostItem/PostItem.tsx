@@ -56,7 +56,7 @@ function PostItem({ postId, title, content, createdAt, userName, userIntro, cate
           <UserInfoWrapper>
             <UserNameWrapper>
               <UserName>{ userName }</UserName>
-              <SubInfo>{ createdAt }</SubInfo>
+              <SubInfo>{ createdAt.split("T")[0] }</SubInfo>
             </UserNameWrapper>
             <SubInfo>{ userIntro }</SubInfo>
           </UserInfoWrapper>

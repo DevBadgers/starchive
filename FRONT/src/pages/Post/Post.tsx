@@ -64,7 +64,7 @@ function Post() {
           <UserInfoWrapper>
             <UserNameWrapper>
               <UserName>{author}</UserName>
-              <SubInfo>{createdAt}</SubInfo>
+              <SubInfo>{createdAt?.split("T")[0]}</SubInfo>
             </UserNameWrapper>
             <SubInfo>어쩌구 저쩌구 개발자입니다.</SubInfo>
           </UserInfoWrapper>
