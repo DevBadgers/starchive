@@ -4,6 +4,7 @@ import com.starchive.springapp.category.exception.CategoryAlreadyExistsException
 import com.starchive.springapp.category.exception.CategoryNotFoundException;
 import com.starchive.springapp.global.dto.ErrorResult;
 import com.starchive.springapp.hashtag.exception.HashTagNotFoundException;
+import com.starchive.springapp.post.exception.InvalidPasswordException;
 import com.starchive.springapp.post.exception.PostNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,5 +47,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResult> handleRuntimeException(RuntimeException ex) {
         ErrorResult errorResult = new ErrorResult(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return ResponseEntity.internalServerError().body(errorResult);
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ErrorResult> handleInvalidPasswordException(InvalidPasswordException ex) {
+        ErrorResult errorResult = new ErrorResult(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResult);
     }
 }

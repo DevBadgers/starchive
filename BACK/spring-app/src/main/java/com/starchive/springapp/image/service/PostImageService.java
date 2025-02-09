@@ -39,6 +39,10 @@ public class PostImageService {
         });
     }
 
+    public void setPostByImagePath(List<String> imagePaths, Post post) {
+        postImageRepository.bulkUpdatePostId(imagePaths, post.getId());
+    }
+
     @Scheduled(cron = "0 0 2 * * ?")
     public void deleteOldOrphanedPostImages() {
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(1); // 하루 전

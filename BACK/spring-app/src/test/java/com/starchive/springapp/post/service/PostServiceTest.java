@@ -8,17 +8,26 @@ import com.starchive.springapp.hashtag.domain.HashTag;
 import com.starchive.springapp.hashtag.repository.HashTagRepository;
 import com.starchive.springapp.image.domain.PostImage;
 import com.starchive.springapp.image.repository.PostImageRepository;
+import com.starchive.springapp.image.service.PostImageService;
 import com.starchive.springapp.post.domain.Post;
 import com.starchive.springapp.post.dto.PostCreateRequest;
 import com.starchive.springapp.post.dto.PostDto;
 import com.starchive.springapp.post.dto.PostListResponse;
+import com.starchive.springapp.post.dto.PostUpdateRequest;
+import com.starchive.springapp.post.exception.InvalidPasswordException;
 import com.starchive.springapp.post.repository.PostRepository;
 import com.starchive.springapp.posthashtag.domain.PostHashTag;
 import com.starchive.springapp.posthashtag.repository.PostHashTagRepository;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,6 +56,8 @@ class PostServiceTest {
 
     @Autowired
     EntityManager em;
+    @Autowired
+    private PostImageService postImageService;
 
     @Test
     public void 게시글_작성_통합_테스트() throws Exception {
@@ -126,6 +137,70 @@ class PostServiceTest {
         //then
         assertThat(findOne.getTitle()).isEqualTo(post1.getTitle());
 
+    }
+
+    @Test
+    public void 게시글_수정_틀린_비밀번호_예외_테스트(){
+        //given
+        Category category = new Category("예시카테고리", null);
+        categoryRepository.save(category);
+
+        PostCreateRequest postCreateRequest =
+                new PostCreateRequest("title", "content", "author", "1234"
+                        , category.getId(), null, null);
+
+
+        postService.createPost(postCreateRequest);
+
+        Post createdPost = postRepository.findAll().getFirst();
+        //when
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(createdPost.getId(), "title", "content", "author", "12345"
+                , category.getId(), null, null);
+
+        //then
+        Assertions.assertThatThrownBy(()-> postService.update(postUpdateRequest)).isInstanceOf(InvalidPasswordException.class);
+    }
+
+    @Test
+    public void 게시글_수정_게시글에_포함되는_이미지_변경_테스트(){
+        //given
+        PostImage postImage1 = new PostImage("imagePath1.jpg");
+        postImageRepository.save(postImage1);
+        PostImage postImage2 = new PostImage("imagePath2.jpg");
+        postImageRepository.save(postImage2);
+
+        Category category = new Category("예시카테고리", null);
+        categoryRepository.save(category);
+
+        List<Long> postImageIds = new ArrayList<>(List.of(postImage1.getId(), postImage2.getId()));
+        String markdownText = """
+            Here is an image example:
+            ![이미지](imagePath1.jpg)
+            ![이미지](imagePath2.jpg)
+            """;
+
+        PostCreateRequest postCreateRequest =
+                new PostCreateRequest("title", markdownText, "author", "password"
+                        , category.getId(), null, postImageIds);
+
+        postService.createPost(postCreateRequest);
+
+        Post findOne = postRepository.findAll().getFirst();
+
+        String updatedMarkdownText = """
+            Here is an image example:
+            ![이미지](imagePath1.jpg)
+            """;
+
+        PostUpdateRequest postUpdateRequest = new PostUpdateRequest(findOne.getId(), "title", updatedMarkdownText, "author", "password"
+                , category.getId(), null, postImageIds);
+
+        //when
+        postService.update(postUpdateRequest);
+
+        //then
+        Assertions.assertThat(postImageRepository.findAll()).hasSize(1);
+        Assertions.assertThat(postImageRepository.findAll().getFirst().getImagePath()).isEqualTo(postImage1.getImagePath());
     }
 
 
