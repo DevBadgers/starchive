@@ -16,7 +16,7 @@ function useAside() {
   const handleCategorySelect = (categoryId: CategoryId) => {
     setActiveCategoryId(categoryId);
     navigate(
-      categoryId
+      categoryId !== undefined && categoryId !== null
         ? `/1?categoryId=${categoryId}`
         : `/`
     );

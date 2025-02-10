@@ -5,7 +5,30 @@ import CategoryNode from "../CategoryNode/CategoryNode";
 import { CategoryAddButton, CategoryList, CategoryManagementContainer, SubCategoryList } from "./CategoryManagement.style";
 
 function CategoryManagement() {
-  const { categories, addCategory, moveCategory } = useCategoryManagement();
+  const {
+    editingCategoryId,
+    setEditingCategoryId,
+  categories,
+    newName,
+    setNewName,
+    createPrimaryCategory,
+    createSubCategory,
+    deleteCategory,
+    updateCategoryName,
+    moveCategory,
+    handleSaveChanges
+  } = useCategoryManagement();
+
+  const commonCategoryProps = {
+    editingCategoryId,
+    setEditingCategoryId,
+    newName,
+    setNewName,
+    createSubCategory,
+    deleteCategory,
+    updateCategoryName,
+    onMove: moveCategory
+  };
 
   return (
     <CategoryManagementContainer>
@@ -14,23 +37,24 @@ function CategoryManagement() {
           <CategoryNode
             name={primaryCategory.name}
             id={primaryCategory.id || 0}
-            onMove={moveCategory}
+            {...commonCategoryProps}
           />
           {primaryCategory.children?.map((subCategory) => (
             <SubCategoryList key={subCategory.id}>
               <CategoryNode
                 name={subCategory.name}
                 id={subCategory.id || 0}
-                onMove={moveCategory}
+                parentId={primaryCategory.id}
+                {...commonCategoryProps}
               />
             </SubCategoryList>
           ))}
         </CategoryList>
       ))}
-      <CategoryAddButton onClick={addCategory}>
+      <CategoryAddButton onClick={createPrimaryCategory}>
         <h4>카테고리 추가</h4>
       </CategoryAddButton>
-      <Button content="변경사항 저장" type="Primary" handleButtonClick={() => {}} />
+      <Button content="변경사항 저장" type="Primary" handleButtonClick={handleSaveChanges} />
     </CategoryManagementContainer>
   )
 }

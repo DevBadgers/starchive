@@ -33,7 +33,7 @@ export const CategoryAddButton = styled.button`
     color: white;
   }
 
-  &:selected {
+  &:active {
     background-color: var(--primary-color);
     color: white;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 10px;

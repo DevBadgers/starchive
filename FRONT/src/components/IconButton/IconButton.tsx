@@ -2,12 +2,13 @@ import { IconButtonContainer, Tooltip } from "./IconButton.style";
 
 interface IconButtonProps {
   children: React.ReactNode;
+  onClick: () => void;
   tooltip?: string;
 }
 
-function IconButton({ children, tooltip }: IconButtonProps) {
+function IconButton({ children, onClick, tooltip }: IconButtonProps) {
   return(
-    <IconButtonContainer>
+    <IconButtonContainer onClick={onClick}>
       {children}
       <Tooltip>{ tooltip }</Tooltip>
     </IconButtonContainer>

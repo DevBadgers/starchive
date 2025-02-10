@@ -1,4 +1,4 @@
-import { PostContainer, MainContent, ButtonContainer, Line, PostHashTagContainer } from "./Post.style";
+import { PostContainer, MainContent, ButtonContainer, Line, PostHashTagContainer, Content } from "./Post.style";
 import {
   TagContainer,
   Title,
@@ -8,11 +8,11 @@ import {
   UserNameWrapper,
   UserName,
   SubInfo,
-  Content,
 } from "../Home/components/PostItem/PostItem.style";
 import { Tag } from "@_components/TagWrapper/TagWrapper.style";
 import { Link } from "react-router-dom";
 import Button from "@_components/Button/Button";
+import MarkdownRenderer from "@_components/MarkdownRenderer/MarkdownRenderer";
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPost } from '@_services/postApi';
@@ -64,13 +64,13 @@ function Post() {
           <UserInfoWrapper>
             <UserNameWrapper>
               <UserName>{author}</UserName>
-              <SubInfo>{createdAt}</SubInfo>
+              <SubInfo>{createdAt?.split("T")[0]}</SubInfo>
             </UserNameWrapper>
             <SubInfo>어쩌구 저쩌구 개발자입니다.</SubInfo>
           </UserInfoWrapper>
         </UserProfileWrapper>
         <Line/>
-        <Content>{content}</Content>
+        <Content><MarkdownRenderer markdown={content ?? ""} /></Content>
         <PostHashTagContainer>
           {hashTags?.map((tag) => (
             <Tag key={tag.hashTagId} $isSelected={false}>

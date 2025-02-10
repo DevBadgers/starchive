@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Container, Editor, Preview, PreviewImg } from "./MarkdownEditor.style";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import CodeBlock from "./CodeBlock";
+import { Container, Editor, Preview } from "./MarkdownEditor.style";
 import ToolBar from "../ToolBar/ToolBar";
+import MarkdownRenderer from "@_components/MarkdownRenderer/MarkdownRenderer";
 
 interface MarkdownEditorProps {
   markdown: string,
@@ -42,18 +40,7 @@ function MarkdownEditor({
           placeholder={markdownGrammar}
         />
       ) : (
-        <Preview>
-          <Markdown
-            children={markdown}
-            remarkPlugins={[remarkGfm]}
-            components={{
-              code: CodeBlock,
-              img: ({ src, alt }) => (
-                <PreviewImg src={src} alt={alt} />
-              ),
-            }}
-          />
-        </Preview>
+        <Preview><MarkdownRenderer markdown={markdown} /></Preview>
       )}
       <input
         type="file"
