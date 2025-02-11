@@ -8,6 +8,7 @@ import com.starchive.springapp.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +53,12 @@ public class PostController {
     public ResponseEntity<PostDto> update(@Valid @RequestBody PostUpdateRequest request) {
         PostDto postDto = postService.update(request);
         return ResponseEntity.ok(postDto);
+    }
+
+    @DeleteMapping("/post/{postId}")
+    @Operation(summary = "게시글 삭제")
+    public ResponseEntity<Null> delete(@Valid @PathVariable("postId") Long postId) {
+        postService.delete(postId);
+        return ResponseEntity.status(204).build();
     }
 }
