@@ -47,4 +47,8 @@ public class PostHashTagService {
     public void deleteManyByHashTagIds(HashSet<Long> hashTagIds) {
         postHashTagRepository.deleteAllByHashTagIds(hashTagIds);
     }
+
+    public void deleteManyByPostId(Long postId) {
+        postHashTagRepository.deleteAllByPostId(postId);
+    }
 }

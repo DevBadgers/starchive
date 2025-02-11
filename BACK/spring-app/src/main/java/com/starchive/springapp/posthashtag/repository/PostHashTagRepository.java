@@ -27,4 +27,8 @@ public interface PostHashTagRepository extends JpaRepository<PostHashTag, Long> 
     @Modifying
     @Query("delete from PostHashTag ph where ph.hashTag.id in :hashTagIds")
     void deleteAllByHashTagIds(@Param("hashTagIds") HashSet<Long> hashTagIds);
+
+    @Modifying
+    @Query("delete from PostHashTag ph where ph.post.id = :postId")
+    void deleteAllByPostId(@Param("postId") Long postId);
 }

@@ -111,7 +111,22 @@ public class PostService {
         return PostDto.of(post, hashTagResponses);
     }
 
-    public void updateImages(PostUpdateRequest postUpdateRequest, Post post){
+    public void delete(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+
+        List<PostImage> postImages = postImageRepository.findAllByPostId(post.getId());
+
+        List<String> urls = postImages.stream().map(PostImage::getImagePath).toList();
+        s3Service.deleteObjects(urls);
+
+        postImageRepository.deleteAll(postImages);
+
+        postHashTagService.deleteManyByPostId(post.getId());
+
+        postRepository.delete(post);
+    }
+
+    private void updateImages(PostUpdateRequest postUpdateRequest, Post post){
         String content = postUpdateRequest.getContent();
         HashSet<String> imageUrlsToUpdate = new HashSet<>();
 
@@ -134,7 +149,7 @@ public class PostService {
         postImageService.setPostByImagePath(new ArrayList<>(imageUrlsToUpdate),post);
     }
 
-    public List<String> extractImageUrls(String markdownContent) {
+    private List<String> extractImageUrls(String markdownContent) {
         List<String> imageUrls = new ArrayList<>();
 
         // 정규식 패턴 정의

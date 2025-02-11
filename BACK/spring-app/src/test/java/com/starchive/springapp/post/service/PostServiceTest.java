@@ -27,10 +27,7 @@ import jakarta.persistence.EntityManager;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -209,16 +206,9 @@ class PostServiceTest {
         MockMultipartFile file1 = new MockMultipartFile("test1", path1, contentType, "test1".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("test2", path2, contentType, "test2".getBytes());
 
-        //Reflection s3Service
-        Field reflectionFieldFor_amazonS3 = s3Service.getClass().getDeclaredField("amazonS3");
-        reflectionFieldFor_amazonS3.setAccessible(true);
-        reflectionFieldFor_amazonS3.set(s3Service, amazonS3);
-
-        Field reflectionFieldFor_bucket = s3Service.getClass().getDeclaredField("bucket");
-        reflectionFieldFor_bucket.setAccessible(true);
-        reflectionFieldFor_bucket.set(s3Service, bucket);
-
         //Mock S3에 이미지 저장
+        setS3ConfigForTest(bucket);
+
         PostImageDto postImageDto1 = postImageService.uploadImage(file1);
         PostImageDto postImageDto2 = postImageService.uploadImage(file2);
 
@@ -237,8 +227,8 @@ class PostServiceTest {
                         , category.getId(), null, postImageIds);
 
         postService.createPost(postCreateRequest);
-        ListObjectsV2Result s3Objects = amazonS3.listObjectsV2(bucket);
 
+        ListObjectsV2Result s3Objects = amazonS3.listObjectsV2(bucket);
         Assertions.assertThat(s3Objects.getKeyCount()).isEqualTo(2);
 
         //when
@@ -260,6 +250,72 @@ class PostServiceTest {
         Assertions.assertThat(s3Objects.getKeyCount()).isEqualTo(1);
         Assertions.assertThat(postImageRepository.findAll()).hasSize(1);
         Assertions.assertThat(postImageRepository.findAll().getFirst().getImagePath()).isEqualTo(postImageDto1.getImagePath());
+    }
+
+    @Test
+    public void 게시글_삭제_통합_테스트() throws NoSuchFieldException, IllegalAccessException {
+        //given
+        String path1 = "imagePath1.jpg";
+        String path2 = "imagePath2.jpg";
+        String contentType = "image/jpg";
+        String bucket = s3MockConfig.getTestBucketName();
+
+        MockMultipartFile file1 = new MockMultipartFile("test1", path1, contentType, "test1".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("test2", path2, contentType, "test2".getBytes());
+
+        //Mock S3에 이미지 저장
+        setS3ConfigForTest(bucket);
+
+        PostImageDto postImageDto1 = postImageService.uploadImage(file1);
+        PostImageDto postImageDto2 = postImageService.uploadImage(file2);
+
+        Category category = new Category("예시카테고리", null);
+        categoryRepository.save(category);
+
+        HashTag hashTag = new HashTag("tag1");
+        hashTagRepository.save(hashTag);
+
+        List<Long> postImageIds = new ArrayList<>(List.of(postImageDto1.getId(), postImageDto2.getId()));
+        String markdownText = """
+            Here is an image example:
+            ![이미지](%s)
+            ![이미지](%s)
+            """.formatted(postImageDto1.getImagePath(), postImageDto2.getImagePath());
+
+        PostCreateRequest postCreateRequest =
+                new PostCreateRequest("title", markdownText, "author", "password"
+                        , category.getId(), Arrays.asList(hashTag.getId()), postImageIds);
+
+        postService.createPost(postCreateRequest);
+
+        ListObjectsV2Result s3Objects = amazonS3.listObjectsV2(bucket);
+
+        Assertions.assertThat(s3Objects.getKeyCount()).isEqualTo(2);
+        Assertions.assertThat(postImageRepository.findAll()).hasSize(2);
+        Assertions.assertThat(postHashTagRepository.findAll()).hasSize(1);
+        Assertions.assertThat(postRepository.findAll()).hasSize(1);
+
+        //when
+        Post post = postRepository.findAll().getFirst();
+        postService.delete(post.getId());
+
+        //then
+        s3Objects = amazonS3.listObjectsV2(bucket);
+        Assertions.assertThat(s3Objects.getKeyCount()).isEqualTo(0);
+        Assertions.assertThat(postImageRepository.findAll()).hasSize(0);
+        Assertions.assertThat(postHashTagRepository.findAll()).hasSize(0);
+        Assertions.assertThat(postRepository.findAll()).hasSize(0);
+    }
+
+    private void setS3ConfigForTest(String bucket) throws NoSuchFieldException, IllegalAccessException {
+        //Reflection s3Service
+        Field reflectionFieldFor_amazonS3 = s3Service.getClass().getDeclaredField("amazonS3");
+        reflectionFieldFor_amazonS3.setAccessible(true);
+        reflectionFieldFor_amazonS3.set(s3Service, amazonS3);
+
+        Field reflectionFieldFor_bucket = s3Service.getClass().getDeclaredField("bucket");
+        reflectionFieldFor_bucket.setAccessible(true);
+        reflectionFieldFor_bucket.set(s3Service, bucket);
     }
 
 
