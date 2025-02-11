@@ -102,7 +102,7 @@ class PostServiceTest {
         //then
         assertThat(response.getPosts()).hasSize(2);
         assertThat(response.getPosts()).extracting("title").containsExactlyInAnyOrder("title1", "title2");
-        assertThat(response.getPosts().get(0).getHashTags()).extracting("name").containsExactly("tag1");
+        assertThat(response.getPosts().get(1).getHashTags()).extracting("name").containsExactly("tag1");
     }
 
     @Test
