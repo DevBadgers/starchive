@@ -3,9 +3,12 @@ package com.starchive.springapp.s3;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.starchive.springapp.global.ErrorMessage;
 import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +56,26 @@ public class S3Service {
 
     public void deleteObject(String key) {
         amazonS3.deleteObject(bucket, key);
+        amazonS3.deleteObjects(new DeleteObjectsRequest(bucket).withKeys(key));
         log.info("Deleted S3 Object: {}", key);
+    }
+
+    public void deleteObjects(List<String> urls) {
+        String[] keys = urls.stream().map(this::extractKeyFromUrl).toArray(String[]::new);
+
+        amazonS3.deleteObjects(new DeleteObjectsRequest(bucket).withKeys(keys));
+
+        for (String key : keys) {
+            log.info("Deleted S3 Object: {}", key);
+        }
+
+    }
+
+    private String extractKeyFromUrl(String url) {
+        URI uri = URI.create(url);
+        String[] urlInfo = url.split("/");
+        String key = urlInfo[urlInfo.length - 1];
+        return key;
     }
 
     // 랜덤파일명 생성 (파일명 중복 방지)

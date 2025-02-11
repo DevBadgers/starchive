@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.starchive.springapp.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +38,7 @@ public class PostService {
     private final PostImageService postImageService;
     private final HashTagService hashTagService;
     private final PostImageRepository postImageRepository;
+    private final S3Service s3Service;
 
     public void createPost(PostCreateRequest request) {
         Category category = categoryService.findOne(request.getCategoryId());
@@ -109,7 +111,6 @@ public class PostService {
         return PostDto.of(post, hashTagResponses);
     }
 
-
     public void updateImages(PostUpdateRequest postUpdateRequest, Post post){
         String content = postUpdateRequest.getContent();
         HashSet<String> imageUrlsToUpdate = new HashSet<>();
@@ -117,21 +118,23 @@ public class PostService {
         imageUrlsToUpdate.addAll(extractImageUrls(content));
 
         List<PostImage> postImages = postImageRepository.findAllByPostId(postUpdateRequest.getId());
-        List<PostImage> imageIdsToDelete = new ArrayList<>();
 
+        List<PostImage> postImageToDelete = new ArrayList<>();
         for (PostImage postImage : postImages) {
             if (imageUrlsToUpdate.contains(postImage.getImagePath())) {
                 imageUrlsToUpdate.remove(postImage.getImagePath());
                 continue;
             }
-            imageIdsToDelete.add(postImage);
+            postImageToDelete.add(postImage);
         }
 
-        postImageRepository.deleteAll(imageIdsToDelete);
+        List<String> urls = postImageToDelete.stream().map(PostImage::getImagePath).toList();
+        s3Service.deleteObjects(urls);
+        postImageRepository.deleteAll(postImageToDelete);
         postImageService.setPostByImagePath(new ArrayList<>(imageUrlsToUpdate),post);
     }
 
-    public static List<String> extractImageUrls(String markdownContent) {
+    public List<String> extractImageUrls(String markdownContent) {
         List<String> imageUrls = new ArrayList<>();
 
         // 정규식 패턴 정의

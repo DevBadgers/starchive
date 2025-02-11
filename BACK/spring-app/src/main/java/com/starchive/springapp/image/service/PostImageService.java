@@ -48,17 +48,9 @@ public class PostImageService {
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(1); // 하루 전
 
         List<PostImage> oldOrphanedPostImages = postImageRepository.findOldOrphanedPostImages(cutoffDate);
-        oldOrphanedPostImages.forEach(postImage -> {
-            s3Service.deleteObject(extractKeyFromUrl(postImage.getImagePath()));
-            postImageRepository.delete(postImage);
-            log.info("Deleted old orphaned PostImages: {}", postImage.getImagePath());
-        });
 
-    }
-
-    private String extractKeyFromUrl(String url) {
-        URI uri = URI.create(url);
-        return uri.getPath().substring(1); // 첫 번째 '/' 제거
+        List<String> urls = oldOrphanedPostImages.stream().map(postImage -> postImage.getImagePath()).toList();
+        s3Service.deleteObjects(urls);
     }
 
 }
