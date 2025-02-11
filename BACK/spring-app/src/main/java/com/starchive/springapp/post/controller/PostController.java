@@ -3,18 +3,14 @@ package com.starchive.springapp.post.controller;
 import com.starchive.springapp.post.dto.PostCreateRequest;
 import com.starchive.springapp.post.dto.PostDto;
 import com.starchive.springapp.post.dto.PostListResponse;
+import com.starchive.springapp.post.dto.PostUpdateRequest;
 import com.starchive.springapp.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -48,6 +44,13 @@ public class PostController {
     @Operation(summary = "상세조회")
     public ResponseEntity<PostDto> findPost(@PathVariable("postId") Long postId) {
         PostDto postDto = postService.findOne(postId);
+        return ResponseEntity.ok(postDto);
+    }
+
+    @PutMapping("/post")
+    @Operation(summary = "게시글 수정")
+    public ResponseEntity<PostDto> update(@Valid @RequestBody PostUpdateRequest request) {
+        PostDto postDto = postService.update(request);
         return ResponseEntity.ok(postDto);
     }
 }
