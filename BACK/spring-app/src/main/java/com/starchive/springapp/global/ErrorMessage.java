@@ -8,4 +8,5 @@ public class ErrorMessage {
     final public static String HASHTAG_NOT_FOUND = "해쉬태그가 존재하지 않습니다.";
     final public static String POST_NOT_FOUND = "게시글이 존재하지 않습니다.";
     final public static String ALREADY_EXISTS_CATEGORY = "이미 존재하는 카테고리 이름입니다.";
+    final public static String INVALID_PASSWORD = "비밀번호가 일치하지 않습니다";
 }

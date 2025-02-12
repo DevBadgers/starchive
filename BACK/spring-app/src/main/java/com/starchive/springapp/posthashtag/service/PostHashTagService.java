@@ -6,6 +6,7 @@ import com.starchive.springapp.post.domain.Post;
 import com.starchive.springapp.posthashtag.domain.PostHashTag;
 import com.starchive.springapp.posthashtag.repository.PostHashTagRepository;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,17 @@ public class PostHashTagService {
 
     public List<PostHashTag> findManyByHashTag(Long hashTagId) {
         return postHashTagRepository.findAllByHashTagId(hashTagId);
+    }
+
+    public List<PostHashTag> findManyByPost(Long postId) {
+        return postHashTagRepository.findAllByPostId(postId);
+    }
+
+    public void deleteManyByHashTagIds(HashSet<Long> hashTagIds) {
+        postHashTagRepository.deleteAllByHashTagIds(hashTagIds);
+    }
+
+    public void deleteManyByPostId(Long postId) {
+        postHashTagRepository.deleteAllByPostId(postId);
     }
 }

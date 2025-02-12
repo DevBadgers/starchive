@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.amazonaws.services.s3.AmazonS3;
 import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +27,19 @@ class S3ServiceTest {
 
     @Autowired
     private S3Service s3Service;
+
+    @BeforeEach
+    public void resetS3Bucket() {
+        String bucketName = s3MockConfig.getTestBucketName();
+
+        // 기존 버킷 삭제 (모든 객체도 함께 삭제됨)
+        if (amazonS3.doesBucketExistV2(bucketName)) {
+            amazonS3.deleteBucket(bucketName);
+        }
+
+        // 버킷 재생성
+        amazonS3.createBucket(bucketName);
+    }
 
     @Test
     public void 이미지_업로드_테스트() throws Exception {

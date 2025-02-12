@@ -4,18 +4,23 @@ import com.starchive.springapp.category.domain.Category;
 import com.starchive.springapp.category.service.CategoryService;
 import com.starchive.springapp.hashtag.dto.HashTagResponse;
 import com.starchive.springapp.hashtag.service.HashTagService;
+import com.starchive.springapp.image.domain.PostImage;
+import com.starchive.springapp.image.repository.PostImageRepository;
 import com.starchive.springapp.image.service.PostImageService;
 import com.starchive.springapp.post.domain.Post;
-import com.starchive.springapp.post.dto.PostCreateRequest;
-import com.starchive.springapp.post.dto.PostDto;
-import com.starchive.springapp.post.dto.PostListResponse;
-import com.starchive.springapp.post.dto.PostSimpleDto;
+import com.starchive.springapp.post.dto.*;
+import com.starchive.springapp.post.exception.InvalidPasswordException;
 import com.starchive.springapp.post.exception.PostNotFoundException;
 import com.starchive.springapp.post.repository.PostRepository;
 import com.starchive.springapp.posthashtag.domain.PostHashTag;
 import com.starchive.springapp.posthashtag.service.PostHashTagService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.starchive.springapp.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +38,8 @@ public class PostService {
     private final CategoryService categoryService;
     private final PostImageService postImageService;
     private final HashTagService hashTagService;
+    private final PostImageRepository postImageRepository;
+    private final S3Service s3Service;
 
     public void createPost(PostCreateRequest request) {
         Category category = categoryService.findOne(request.getCategoryId());
@@ -81,6 +88,98 @@ public class PostService {
         Page<PostSimpleDto> dtoPage = getPostDtos(posts);
 
         return PostListResponse.from(dtoPage);
+    }
+
+    public PostDto update(PostUpdateRequest request) {
+        Post post = postRepository.findById(request.getId()).orElseThrow(PostNotFoundException::new);
+
+        if(request.getPassword() != post.getPassword()) {
+            throw new InvalidPasswordException();
+        }
+
+        Category category = categoryService.findOne(request.getCategoryId());
+
+        post.update(request, category);
+
+        HashSet<Long> hashTagIds = new HashSet<>();
+        postHashTagService.findManyByPost(post.getId()).stream().forEach(postHashTag -> {hashTagIds.add(postHashTag.getHashTag().getId());});
+
+        updatePostHashTags(request, hashTagIds, post);
+
+        updateImages(request, post);
+
+        List<HashTagResponse> hashTagResponses = hashTagService.findManyByPost(post.getId());
+        return PostDto.of(post, hashTagResponses);
+    }
+
+    public void delete(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+
+        List<PostImage> postImages = postImageRepository.findAllByPostId(post.getId());
+
+        List<String> urls = postImages.stream().map(PostImage::getImagePath).toList();
+        s3Service.deleteObjects(urls);
+
+        postImageRepository.deleteAll(postImages);
+
+        postHashTagService.deleteManyByPostId(post.getId());
+
+        postRepository.delete(post);
+    }
+
+    private void updateImages(PostUpdateRequest postUpdateRequest, Post post){
+        String content = postUpdateRequest.getContent();
+        HashSet<String> imageUrlsToUpdate = new HashSet<>();
+
+        imageUrlsToUpdate.addAll(extractImageUrls(content));
+
+        List<PostImage> postImages = postImageRepository.findAllByPostId(postUpdateRequest.getId());
+
+        List<PostImage> postImageToDelete = new ArrayList<>();
+        for (PostImage postImage : postImages) {
+            if (imageUrlsToUpdate.contains(postImage.getImagePath())) {
+                imageUrlsToUpdate.remove(postImage.getImagePath());
+                continue;
+            }
+            postImageToDelete.add(postImage);
+        }
+
+        List<String> urls = postImageToDelete.stream().map(PostImage::getImagePath).toList();
+        s3Service.deleteObjects(urls);
+        postImageRepository.deleteAll(postImageToDelete);
+        postImageService.setPostByImagePath(new ArrayList<>(imageUrlsToUpdate),post);
+    }
+
+    private List<String> extractImageUrls(String markdownContent) {
+        List<String> imageUrls = new ArrayList<>();
+
+        // 정규식 패턴 정의
+        String regex = "!\\[.*?\\]\\((.*?)\\)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(markdownContent);
+
+        // 매칭된 이미지 URL 추출
+        while (matcher.find()) {
+            imageUrls.add(matcher.group(1));
+        }
+
+        return imageUrls;
+    }
+
+    private void updatePostHashTags(PostUpdateRequest request, HashSet<Long> hashTagIds, Post post) {
+        List<Long> hashTagIdsToUpdate = new ArrayList<>();
+        if(request.getHashTagIds() != null) {
+            for (Long updatedHashTagId : request.getHashTagIds()) {
+                if(hashTagIds.contains(updatedHashTagId)) {
+                   hashTagIds.remove(updatedHashTagId);
+                   continue;
+                }
+                hashTagIdsToUpdate.add(updatedHashTagId);
+            }
+        }
+
+        postHashTagService.storePostHashTag(hashTagIdsToUpdate, post);
+        postHashTagService.deleteManyByHashTagIds(hashTagIds);
     }
 
     private List<Long> extractCategoryIds(Category category) {

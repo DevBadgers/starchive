@@ -4,6 +4,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 import com.starchive.springapp.category.domain.Category;
 import com.starchive.springapp.post.dto.PostCreateRequest;
+import com.starchive.springapp.post.dto.PostUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -61,6 +62,13 @@ public class Post {
         post.category = category;
 
         return post;
+    }
+
+    public void update(PostUpdateRequest request, Category category) {
+        title = request.getTitle();
+        content = request.getContent();
+        author = request.getAuthor();
+        this.category = category;
     }
 
 }

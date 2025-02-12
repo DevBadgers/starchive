@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @TestConfiguration
-class S3MockConfig {
+public class S3MockConfig {
 
     private String testBucketName = "test-bucket-in-memory";
 
