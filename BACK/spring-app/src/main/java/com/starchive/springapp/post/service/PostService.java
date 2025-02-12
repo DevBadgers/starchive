@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +56,7 @@ public class PostService {
 
     //todo: fetch join (양방향 연관관계)
     public PostListResponse findPosts(Long categoryId, Long hashTagId, int pageNum, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createAt").descending());
         List<Long> categoryIds = null;
         if (categoryId != null) {
             Category category = categoryService.findOne(categoryId);
