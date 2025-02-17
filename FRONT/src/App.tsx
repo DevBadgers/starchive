@@ -9,6 +9,7 @@ import useLoadingStore from './stores/useLoadingStore';
 import LoadingModal from '@_components/LoadingModal/LoadingModal';
 import Post from './pages/Post/Post';
 import Toast from './pages/CreatePost/components/Toast/Toast'
+import MyPage from './pages/MyPage/MyPage'
 
 function App() {
   const { isLoading } = useLoadingStore();
@@ -20,6 +21,7 @@ function App() {
         <Route path='/:page?' element={<Home />} />
         <Route path='/create-post' element={<CreatePost />} />
         <Route path='/post/:postId' element={<Post />} />
+        <Route path='mypage' element={<MyPage />} />
       </Routes>
       <Footer />
       <LoadingModal isLoading={isLoading} />
