@@ -51,7 +51,7 @@ function Home() {
         <PagingButton
           totalPages={totalPages}
           currentPage={currentPage}
-          setCurrentPage={(newPage: number) => navigate(`/${newPage}${searchParams.toString()}`)}
+          setCurrentPage={(newPage: number) => navigate(`/${newPage}?${searchParams.toString()}`)}
         />
       </PagingButtonWrapper>
     </Wrapper>
