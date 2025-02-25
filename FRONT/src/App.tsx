@@ -9,6 +9,7 @@ import useLoadingStore from './stores/useLoadingStore';
 import LoadingModal from '@_components/LoadingModal/LoadingModal';
 import Post from './pages/Post/Post';
 import Toast from './pages/CreatePost/components/Toast/Toast'
+import MyPage from './pages/MyPage/MyPage'
 import SignIn from './pages/Auth/SignIn'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path='/:page?' element={<Home />} />
         <Route path='/create-post' element={<CreatePost />} />
         <Route path='/post/:postId' element={<Post />} />
+        <Route path='mypage' element={<MyPage />} />
         <Route path='/signin' element={<SignIn />} />
       </Routes>
       <Footer />
