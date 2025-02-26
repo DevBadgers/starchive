@@ -79,7 +79,7 @@ public class PostService {
                 postIds.add(postHashTag.getPost().getId());
             }
             if (postIds.isEmpty()) {
-                postIds = null;
+                return PostListResponse.from(Page.empty());
             }
         }
 
