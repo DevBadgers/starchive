@@ -17,7 +17,6 @@ export const CategorySelect = styled.div`
   background-color: #fff;
   font-size: 16px;
   width: 100%;
-  box-sizing: border-box;
 `;
 
 export const DropdownList = styled.ul`
@@ -26,7 +25,6 @@ export const DropdownList = styled.ul`
   height: auto;
   left: 0;
   width: 100%;
-  box-sizing: border-box;
   border: 1px solid #000;
   background-color: #fff;
   z-index: 100;

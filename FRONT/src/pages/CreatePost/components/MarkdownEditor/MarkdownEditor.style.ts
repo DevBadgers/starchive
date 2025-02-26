@@ -17,7 +17,6 @@ const sharedStyles = `
 
 export const Editor = styled.textarea`
   ${sharedStyles}
-  box-sizing: border-box;
   width: 100%;
   flex-grow: 1;
   font-family: inherit;
