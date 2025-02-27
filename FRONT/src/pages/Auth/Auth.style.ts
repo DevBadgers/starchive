@@ -108,3 +108,38 @@ export const AuthLinkContainer = styled.nav`
     color: var(--primary-color);
   }
 `;
+export const ProfileImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 0;
+`;
+
+export const ProfileImageContainer = styled.div`
+  position: relative;
+`;
+
+export const ProfileImage = styled.div`
+  width: 100px;
+  aspect-ratio: 1;
+  background-color: #eee;
+  border-radius: 50%;
+`;
+
+export const EditButton = styled.button`
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 40px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  box-shadow:
+    2px 2px 8px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 4px rgba(85, 126, 143, 0.5);
+  cursor: pointer;
+`;
