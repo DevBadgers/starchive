@@ -4,7 +4,7 @@ export const AuthWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 104px 0;
+  padding: 80px 0;
   min-height: calc(100dvh - 55px);
 
   @media (max-width: 470px) {
@@ -16,7 +16,7 @@ export const AuthContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 40px 80px;
+  padding: 80px;
   width: 500px;
   background-color: white;
   border-radius: 32px;
