@@ -11,6 +11,7 @@ export const FieldContainer = styled.div`
 
 export const Label = styled.label`
   padding-left: 4px;
+  color: #757575;
 `;
 
 export const PasswordInputContainer = styled.div`
