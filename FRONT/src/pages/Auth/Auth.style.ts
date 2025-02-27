@@ -52,46 +52,6 @@ export const AuthForm = styled.form`
   gap: 16px;
 `;
 
-export const Fieldset = styled.fieldset`
-  border: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-`;
-
-export const Label = styled.label`
-  padding-left: 4px;
-`;
-
-export const PasswordInputContainer = styled.div`
-  position: relative;
-`;
-
-export const Input = styled.input`
-  align-content: center;
-  width: 100%;
-  padding: 16px 24px;
-  border-radius: 8px;
-  border: 1px solid var(--primary-color);
-  font-size: 16px;
-
-  &[type="password"] {
-    padding-right: 49px;
-  }
-`;
-
-export const EyeIcon = styled.img`
-  position: absolute;
-  width: 17px;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-  cursor: pointer;
-`;
-
 const authButtonStyle = `
   all: unset;
   display: flex;
