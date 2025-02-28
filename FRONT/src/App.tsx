@@ -11,6 +11,7 @@ import Post from './pages/Post/Post';
 import Toast from './pages/CreatePost/components/Toast/Toast'
 import MyPage from './pages/MyPage/MyPage'
 import SignIn from './pages/Auth/SignIn'
+import SignUp from './pages/Auth/SignUp'
 
 function App() {
   const { isLoading } = useLoadingStore();
@@ -24,6 +25,7 @@ function App() {
         <Route path='/post/:postId' element={<Post />} />
         <Route path='mypage' element={<MyPage />} />
         <Route path='/signin' element={<SignIn />} />
+        <Route path='/signup' element={<SignUp />} />
       </Routes>
       <Footer />
       <LoadingModal isLoading={isLoading} />

@@ -4,7 +4,7 @@ export const AuthWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 104px 0;
+  padding: 80px 0;
   min-height: calc(100dvh - 55px);
 
   @media (max-width: 470px) {
@@ -16,7 +16,7 @@ export const AuthContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 40px 80px;
+  padding: 80px;
   width: 500px;
   background-color: white;
   border-radius: 32px;
@@ -50,46 +50,6 @@ export const AuthForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 16px;
-`;
-
-export const Fieldset = styled.fieldset`
-  border: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-`;
-
-export const Label = styled.label`
-  padding-left: 4px;
-`;
-
-export const PasswordInputContainer = styled.div`
-  position: relative;
-`;
-
-export const Input = styled.input`
-  align-content: center;
-  width: 100%;
-  padding: 16px 24px;
-  border-radius: 8px;
-  border: 1px solid var(--primary-color);
-  font-size: 16px;
-
-  &[type="password"] {
-    padding-right: 49px;
-  }
-`;
-
-export const EyeIcon = styled.img`
-  position: absolute;
-  width: 17px;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-  cursor: pointer;
 `;
 
 const authButtonStyle = `
@@ -147,4 +107,39 @@ export const AuthLinkContainer = styled.nav`
   :visited {
     color: var(--primary-color);
   }
+`;
+export const ProfileImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 0;
+`;
+
+export const ProfileImageContainer = styled.div`
+  position: relative;
+`;
+
+export const ProfileImage = styled.div`
+  width: 100px;
+  aspect-ratio: 1;
+  background-color: #eee;
+  border-radius: 50%;
+`;
+
+export const EditButton = styled.button`
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 40px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  box-shadow:
+    2px 2px 8px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 4px rgba(85, 126, 143, 0.5);
+  cursor: pointer;
 `;
